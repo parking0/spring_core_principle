@@ -3,7 +3,11 @@ package hello.core.member;
 public class MemberServiceImpl implements MemberService {
 
     //MemberServiceImpl가 memberRepository, MemoryMemberRepository를 모두 의존중. --DIP 위반
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
+    //private final MemberRepository memberRepository = new MemoryMemberRepository();       //AppConfig
+    private final MemberRepository memberRepository;
+    public MemberServiceImpl(MemberRepository memberRepository){        //생성자 생성 <= AppConfig
+        this.memberRepository=memberRepository;
+    }
 
     @Override
     public void join(Member member) {
