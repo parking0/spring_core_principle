@@ -9,11 +9,11 @@ public class MemberApp {
 
     public static void main(String[] args) {
         MemberService memberService = new MemberServiceImpl();
-        Member member = new Member(1L, "memberA", Grade.VIP);
+        Member member = new Member(1L, "memberA", Grade.VIP);       //long이기 때문에 1L
         memberService.join(member);
 
         Member findMember = memberService.findMember(1L);
-        System.out.println("new member = " + member.getName());
+        System.out.println("new member = " + member.getName());         //여기선 눈으로 검증하지만 Test에선 x
         System.out.println("find Member = " + findMember.getName());
     }
 
