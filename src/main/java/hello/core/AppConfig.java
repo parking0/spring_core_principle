@@ -12,7 +12,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration          //설정 정보
+                        //Configuration을 빼면 memberRepository가 3번 호출됨 - Singleton이 깨졌기 때문
 public class AppConfig {            //애플리케이션의 전체 동작 방식을 구성
+
+    //@Bean memberService -> new MemoryMemberRepository()
+    //@Bean orderService -> new MemoryMemberRepository()
+
+    //call AppConfig.memberService
+    //call AppConfig.memberRepository
+    //call AppConfig.memberRepository
+    //call AppConfig.orderService
+    //call AppConfig.memberRepository
+
+    //call AppConfig.memberService
+    //call AppConfig.memberRepository
+    //call AppConfig.orderService
 
     //AppConfig  --  역할을 세우고 그 안에 구현을 넣어서 => 깔끔하게 만듦 & 중복 제거
     //AppCnfig으로 OrderSerrviceImple과 같은 사용 영역의 어떤 코드도 변경할 필요X
@@ -21,17 +35,26 @@ public class AppConfig {            //애플리케이션의 전체 동작 방식
         //AppConfig는 생성한 객체 인스턴스의 참조(레퍼런스)를 생성자를 통해서 주입(연결)해준다.
         /*appConfig 객체는 memoryMemberRepository 객체를 생성하고,
          그 참조값을 memberServiceImpl을 생성하면서 생성자로 전달한다.*/
+
+        System.out.println("call AppConfig.memberService");
+
         return new MemberServiceImpl(memberRepository());
     }
 
     @Bean
     public MemberRepository memberRepository() {   //AppConfig 리팩터링
+
+        System.out.println("call AppConfig.memberRepository");
+
         return new MemoryMemberRepository();                //ctrl+alt+m
     }
 
     @Bean
     public OrderService orderService(){
         //AppConfig는 생성한 객체 인스턴스의 참조(레퍼런스)를 생성자를 통해서 주입(연결)해준다.
+
+        System.out.println("call AppConfig.orderService");
+
         return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
